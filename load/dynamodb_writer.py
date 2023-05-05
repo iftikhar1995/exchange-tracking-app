@@ -20,15 +20,7 @@ class DynamoDBWriter:
         with self.__table.batch_writer() as batch:
 
             for exchange_rate in self.__exchange_rates:
-
-                item = {
-                    Constants.EXCHANGE_RATE_DATE: date.today().isoformat(),
-                    Constants.CURRENCY_CODE: exchange_rate.currency_code,
-                    Constants.CURRENCY_NAME: exchange_rate.currency_name,
-                    Constants.RATE: str(exchange_rate.rate)
-                }
-
-                batch.put_item(Item=item)
+                batch.put_item(Item=exchange_rate.to_dict())
 
     def write(self):
 
