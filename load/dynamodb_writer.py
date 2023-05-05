@@ -1,3 +1,5 @@
+from datetime import date
+
 import boto3
 
 from utils.constants import Constants
@@ -20,9 +22,10 @@ class DynamoDBWriter:
             for exchange_rate in self.__exchange_rates:
 
                 item = {
+                    Constants.EXCHANGE_RATE_DATE: date.today().isoformat(),
                     Constants.CURRENCY_CODE: exchange_rate.currency_code,
                     Constants.CURRENCY_NAME: exchange_rate.currency_name,
-                    Constants.RATE: exchange_rate.rate
+                    Constants.RATE: str(exchange_rate.rate)
                 }
 
                 batch.put_item(Item=item)
