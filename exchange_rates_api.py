@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 
-from extract.data_scrapper import DataScrapper
+from extract.exchange_rate_extractor import ExchangeRateExtractor
 from load.dynamodb_writer import DynamoDBWriter
 from utils.constants import Constants
 from utils.exchange_rate import ExchangeRate
@@ -12,7 +12,7 @@ app = Flask(__name__)
 def get_exchange_rates():
 
     # Return the exchange rates as a JSON response
-    return jsonify(DataScrapper().get_exchange_rates()), 200
+    return jsonify(ExchangeRateExtractor().get_exchange_rates()), 200
 
 
 @app.route('/api/exchange-rates', methods=['POST'])

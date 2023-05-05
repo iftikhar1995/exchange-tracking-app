@@ -8,13 +8,12 @@ from utils.exchange_rate import ExchangeRate
 from utils.exchange_tracking_exception import DataScrapperException
 
 
-class DataScrapper:
+class ExchangeRateExtractor:
 
     def __init__(self):
         self.url = Constants.EURO_EXCHANGE_RATES_URL
-        self.__raw_forex_table = self.__get_raw_forex_table()
 
-    def __get_raw_forex_table(self):
+    def __scrape_forex_table(self):
 
         # Parse the HTML content of the response using BeautifulSoup
         response = requests.get(self.url)
@@ -25,12 +24,14 @@ class DataScrapper:
 
         return exchange_rates_table
 
-    def __parse_forex_data(self):
+    def __get_exchange_data_from_website(self):
 
         # Extract the exchange rates from the table
         exchange_rates = list()
 
-        for row in self.__raw_forex_table.find_all(Constants.TR)[1:]:
+        raw_forex_table = self.__scrape_forex_table()
+
+        for row in raw_forex_table.find_all(Constants.TR)[1:]:
 
             columns = row.find_all(Constants.TD)
 
@@ -48,7 +49,7 @@ class DataScrapper:
 
         try:
 
-            return self.__parse_forex_data()
+            return self.__get_exchange_data_from_website()
 
         except Exception as error:
 
@@ -56,4 +57,4 @@ class DataScrapper:
 
 
 if __name__ == "__main__":
-    print(DataScrapper().get_exchange_rates())
+    print(ExchangeRateExtractor().get_exchange_rates())
