@@ -15,7 +15,7 @@ def get_exchange_rates():
     return jsonify(DataScrapper().get_exchange_rates()), 200
 
 
-@app.route('/api/save-exchange-rates', methods=['POST'])
+@app.route('/api/exchange-rates', methods=['POST'])
 def save_exchange_rates():
 
     input_data = request.get_json()
