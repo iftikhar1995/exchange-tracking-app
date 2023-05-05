@@ -9,8 +9,8 @@ class DynamoDBWriter:
 
     def __init__(self, exchange_rates: list[ExchangeRate]):
 
-        self.__dynamodb = boto3.resource('dynamodb')
-        self.__table = self.__dynamodb .Table('')
+        self.__dynamodb = boto3.resource(Constants.DYNAMODB)
+        self.__table = self.__dynamodb .Table(Constants.DESTINATION_TABLE)
         self.__exchange_rates = exchange_rates
 
     def __batch_writer(self):
