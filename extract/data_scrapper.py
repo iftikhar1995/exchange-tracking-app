@@ -1,3 +1,5 @@
+from datetime import date
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -32,15 +34,15 @@ class DataScrapper:
 
             columns = row.find_all(Constants.TD)
 
-            exchange_rate = ExchangeRate(
-                currency_code=columns[Constants.ExchangeRate.CURRENCY_CODE].text.strip(),
-                currency_name=columns[Constants.ExchangeRate.CURRENCY_NAME].text.strip(),
-                rate=float(columns[Constants.ExchangeRate.RATE].text.strip())
-            )
+            rates = {
+                Constants.RATE: columns[Constants.ExchangeRate.CURRENCY_CODE].text.strip(),
+                Constants.CURRENCY_NAME: columns[Constants.ExchangeRate.CURRENCY_NAME].text.strip(),
+                Constants.CURRENCY_CODE: columns[Constants.ExchangeRate.RATE].text.strip()
+            }
 
-            exchange_rates.append(exchange_rate)
+            exchange_rates.append(rates)
 
-        return exchange_rates
+        return ExchangeRate(rates=exchange_rates, date=date.today().strftime(Constants.DATE_FORMAT))
 
     def get_exchange_rates(self):
 

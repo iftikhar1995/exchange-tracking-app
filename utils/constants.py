@@ -17,10 +17,13 @@ class Constants:
         CURRENCY_NAME = 1
         RATE = 2
 
-    EXCHANGE_RATE_DATE = "exchange_rate_date"
+    DATE = "date"
     CURRENCY_CODE = "currency_code"
     CURRENCY_NAME = "currency_name"
+    RATES = "rates"
     RATE = "rate"
+
+    DATE_FORMAT = "%Y-%m-%d"
 
     DYNAMODB = "dynamodb"
     DESTINATION_TABLE = "ExchangeRates"

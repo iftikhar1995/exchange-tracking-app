@@ -9,24 +9,24 @@ from utils.exchange_tracking_exception import DynamoDBWriterException
 
 class DynamoDBWriter:
 
-    def __init__(self, exchange_rates: list[ExchangeRate]):
+    def __init__(self, exchange_rates: ExchangeRate):
 
         self.__dynamodb = boto3.resource(Constants.DYNAMODB)
-        self.__table = self.__dynamodb .Table(Constants.DESTINATION_TABLE)
-        self.__exchange_rates = exchange_rates
+        self.__table = self.__dynamodb.Table(Constants.DESTINATION_TABLE)
+        self.__exchange_rates = exchange_rates.to_dict()
 
-    def __batch_writer(self):
+    def __put_item(self):
 
-        with self.__table.batch_writer() as batch:
-
-            for exchange_rate in self.__exchange_rates:
-                batch.put_item(Item=exchange_rate.to_dict())
+        self.__dynamodb.put_item(
+            TableName=Constants.DESTINATION_TABLE,
+            Item=self.__exchange_rates
+        )
 
     def write(self):
 
         try:
 
-            self.__batch_writer()
+            self.__put_item()
 
         except Exception as error:
 
