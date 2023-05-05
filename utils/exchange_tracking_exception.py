@@ -13,3 +13,10 @@ class DataScrapperException(ExchangeTrackingException):
     def __init__(self, exception: Exception):
         message = f"Unable to scrape data from {Constants.EURO_EXCHANGE_RATES_URL}."
         super().__init__(message, exception)
+
+
+class DynamoDBWriterException(ExchangeTrackingException):
+
+    def __init__(self, exception: Exception):
+        message = f"Unable to load data into {Constants.TABLE}."
+        super().__init__(message, exception)

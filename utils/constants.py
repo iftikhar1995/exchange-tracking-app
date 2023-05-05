@@ -16,3 +16,10 @@ class Constants:
         CURRENCY_CODE = 0
         CURRENCY_NAME = 1
         RATE = 2
+
+    CURRENCY_CODE = "currency_code"
+    CURRENCY_NAME = "currency_name"
+    RATE = "rate"
+
+    DYNAMODB = "dynamodb"
+    DESTINATION_TABLE = "ExchangeRates"
