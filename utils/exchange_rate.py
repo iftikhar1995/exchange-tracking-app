@@ -10,4 +10,3 @@ class ExchangeRate:
 
     def to_dict(self):
         return asdict(self)
-

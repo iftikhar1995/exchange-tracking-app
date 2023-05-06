@@ -1,5 +1,3 @@
-from datetime import date
-
 import boto3
 
 from utils.constants import Constants
@@ -12,13 +10,13 @@ class DynamoDBWriter:
     def __init__(self, exchange_rates: ExchangeRate):
 
         self.__dynamodb = boto3.resource(Constants.DYNAMODB)
-        self.__table = self.__dynamodb.Table(Constants.DESTINATION_TABLE)
+        self.__table = self.__dynamodb.Table(Constants.DYNAMO_DB_TABLE_NAME)
         self.__exchange_rates = exchange_rates.to_dict()
 
     def __put_item(self):
 
         self.__dynamodb.put_item(
-            TableName=Constants.DESTINATION_TABLE,
+            TableName=Constants.DYNAMO_DB_TABLE_NAME,
             Item=self.__exchange_rates
         )
 

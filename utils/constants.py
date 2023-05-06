@@ -11,6 +11,7 @@ class Constants:
     FOREX_TABLE = "forextable"
     TD = "td"
     TR = "tr"
+    ITEMS = "Items"
 
     class ExchangeRate(IntEnum):
         CURRENCY_CODE = 0
@@ -22,8 +23,10 @@ class Constants:
     CURRENCY_NAME = "currency_name"
     RATES = "rates"
     RATE = "rate"
+    PERCENT_CHANGE = "percent_change"
+    COMPARE_PREVIOUS = "compare_previous"
 
     DATE_FORMAT = "%Y-%m-%d"
 
     DYNAMODB = "dynamodb"
-    DESTINATION_TABLE = "ExchangeRates"
+    DYNAMO_DB_TABLE_NAME = "ExchangeRates"
