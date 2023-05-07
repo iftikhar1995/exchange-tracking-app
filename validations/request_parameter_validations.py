@@ -6,9 +6,12 @@ from utils.exchange_tracking_exception import InvalidDateException, InvalidCompa
 
 
 class RequestParameterValidations:
+    """
+    This class will be responsible for validating the request parameters.
+    """
 
     @staticmethod
-    def validate_date(date: str):
+    def validate_date(date: str) -> bool:
         if date:
             try:
                 datetime.strptime(date, Constants.DATE_FORMAT)
@@ -18,7 +21,7 @@ class RequestParameterValidations:
         return True
 
     @staticmethod
-    def validate_compare_previous(compare_previous: str):
+    def validate_compare_previous(compare_previous: str) -> bool:
         if compare_previous:
             if isinstance(compare_previous, str) and compare_previous.lower() in ["true", "false"]:
                 return True
@@ -27,7 +30,7 @@ class RequestParameterValidations:
         return True
 
     @staticmethod
-    def validate_rates(rates: dict):
+    def validate_rates(rates: dict) -> bool:
 
         for currency_code, rate in rates.items():
             if isinstance(currency_code, str) and rate.get(Constants.RATE, False) and rate.get(Constants.CURRENCY_NAME, False):

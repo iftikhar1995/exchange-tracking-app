@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
 import requests
 import boto3
@@ -11,12 +11,20 @@ from utils.exchange_tracking_exception import DataScrapperException, DataNotFoun
 
 
 class ExchangeRateExtractor:
+    """
+    Class will be responsible for extracting the forex information.
+    """
 
     def __init__(self):
         self.url = Constants.EURO_EXCHANGE_RATES_URL
-        self.__dynamo_db = None #boto3.client(Constants.DYNAMODB)
+        self.__dynamo_db = boto3.client(Constants.DYNAMODB)
 
-    def __scrape_forex_table(self):
+    def __scrape_forex_table(self) -> dict:
+        f"""
+        A helper function that will scrap the data from {Constants.EURO_EXCHANGE_RATES_URL}.
+        
+        :return: A dictionary containing forex information. 
+        """
 
         # Parse the HTML content of the response using BeautifulSoup
         response = requests.get(self.url)
@@ -27,7 +35,12 @@ class ExchangeRateExtractor:
 
         return exchange_rates_table
 
-    def __get_exchange_data_from_website(self):
+    def __get_exchange_data_from_website(self) -> ExchangeRate:
+        """
+        A helper function that will apply a structure to forex data and returns it.
+
+        :return: Exchange Rates from the website.
+        """
 
         # Extract the exchange rates from the table
         exchange_rates = dict()
@@ -46,6 +59,13 @@ class ExchangeRateExtractor:
         return ExchangeRate(rates=exchange_rates, date=date.today().strftime(Constants.DATE_FORMAT))
 
     def __get_date_specific_exchange_rate_from_db(self, _date: str) -> dict:
+        f"""
+        A helper function to get exchange rate of specific date stored in the database.
+        
+        :param _date: A string representation of date in {Constants.DATE_FORMAT} format. 
+        
+        :return: The exchange rate data.
+        """
 
         query_params = {
             'TableName': Constants.DYNAMO_DB_TABLE_NAME,
@@ -64,7 +84,16 @@ class ExchangeRateExtractor:
 
         raise DataNotFoundException(_date)
 
-    def __get_rates(self, _date: str, compare_with_previous_day: bool):
+    def __get_rates(self, _date: str, compare_with_previous_day: bool) -> list:
+        """
+        Returns the exchange rate.
+
+        :param _date: (Optional) If specified then fetch the data for the date otherwise latest data will be fetched
+                      from website.
+        :param compare_with_previous_day: (Optional) If true then previous day comparison will be made.
+
+        :return: the exchange rates information.
+        """
 
         rates = self.__get_exchange_data_from_website() \
             if not _date else self.__get_date_specific_exchange_rate_from_db(_date)
@@ -92,10 +121,23 @@ class ExchangeRateExtractor:
         return rates
 
     def get_exchange_rates(self, _date=None, compare_with_previous_day=False):
+        """
+        Function visible for other classes to get the exchange rates data.
+
+        :param _date: (Optional) If specified then fetch the data for the date otherwise latest data will be fetched
+                      from website.
+        :param compare_with_previous_day: (Optional) If true then previous day comparison will be made.
+
+        :return: the exchange rates information.
+        """
 
         try:
 
             return self.__get_rates(_date, compare_with_previous_day)
+
+        except DataNotFoundException as no_data_exception:
+
+            raise no_data_exception
 
         except Exception as error:
 
